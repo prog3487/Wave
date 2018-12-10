@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+## Wave effect
+# Tessellation 
+- Pixels per edge method(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
+- Discard faces outside frustum. (working)
 
-You can use the [editor on GitHub](https://github.com/prog3487/Wave/edit/gh-pages/README.md) to maintain and preview the content for your website in Markdown files.
+# Normal mapping & Displacement
+- Used 2 textures for normal mapping and height displacement.
+- RGB for normal, alpha chennel for height.
+- Texture coordinates are scaled and translated.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+# Cubemap
+- working...
 
-### Markdown
+# Lighting
+- One directional light with diffuse, Fresnel effect, Specular.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# Controls
+- W, A, S, D for camera move (Hold LShift for slow moving)
+- 1 - switch tessellation camera to teapot.
+- 2 - switch tessellation camera to real camera.
+- 3 - wireframe drawing mode.
+- 4 - cull counter clockwise drawing mode.
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/prog3487/Wave/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+# Etc
+- Need DirectXTK in $(SolutionDir)/../DirectXTK to build & run.
