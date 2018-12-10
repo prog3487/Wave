@@ -1,6 +1,6 @@
 # Wave
 ## Tessellation 
-- Pixels per edge method(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
+- Pixels per edge approach(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
 - Discard faces outside frustum. (working)
 
 ## Normal mapping & Displacement
