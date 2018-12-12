@@ -1,15 +1,17 @@
 # Wave
+
 ## Tessellation 
 - Pixels per edge approach(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
 - Discard faces outside frustum. (working)
 
 ## Normal mapping & Displacement
 - Used 2 textures for normal mapping and height displacement.
-- RGB for normal, alpha chennel for height.
+- RGB for normal, alpha channel for height.
 - Texture coordinates are scaled and translated.
 
 ## Cubemap
-- working...
+- Sky sphere.
+- Wave reflection from cubemap.
 
 ## Lighting
 - One directional light with diffuse, Fresnel effect, Specular.
@@ -23,3 +25,7 @@
 
 ## Etc
 - Need DirectXTK in $(SolutionDir)/../DirectXTK to build & run.
+
+![Image](./wave.png)
+
+![Image](./wave_tessellation.png)
