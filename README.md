@@ -26,6 +26,6 @@
 ## Etc
 - Need DirectXTK in $(SolutionDir)/../DirectXTK to build & run.
 
-![Image](./wave.png)
+![Image](./wave.jpg)
 
-![Image](./wave_tessellation.png)
+![Image](./wave_tessellation.jpg)
