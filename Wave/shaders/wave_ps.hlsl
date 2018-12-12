@@ -2,7 +2,9 @@
 
 Texture2D TexWave0 : register(t0);
 Texture2D TexWave1 : register(t1);
+TextureCube TexCube : register(t2);
 sampler NormalSampler : register(s0);
+sampler CubeSampler : register(s1);
 
 cbuffer LightBuffer : register(b0)
 {
@@ -73,12 +75,14 @@ float4 main(DomainOut pin) : SV_Target
 	float3 n0 = TexWave0.Sample(NormalSampler, pin.NormCoord0).rgb;
 	float3 n1 = TexWave1.Sample(NormalSampler, pin.NormCoord1).rgb;
 	
-	//float4 diffuse = TexWave1.Sample(NormalSampler, pin.TexCoord);
-	float4 diffuse = gMaterial.DiffuseAlbedo;
-
 	float3 bn0 = NormalSampleToWorldSpace(n0, pin.NormalW, pin.TangentW);
 	float3 bn1 = NormalSampleToWorldSpace(n1, pin.NormalW, pin.TangentW);
+	
 	float3 bn = normalize(bn0 + bn1);
+
+	float3 r = reflect(-ToEye, bn);
+	float4 diffuse = TexCube.Sample(CubeSampler, r);
+	//float4 diffuse = gMaterial.DiffuseAlbedo;
 
 	float3 LitColor = ComputeDirectionalLight(gDirLight, gMaterial, diffuse.rgb, bn, ToEye);
 	return float4(LitColor, diffuse.a);

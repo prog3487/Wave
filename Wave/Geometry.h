@@ -27,7 +27,28 @@ namespace Bruce
 		UINT ByteWidthVertices() const { return sizeof(T) * vertices.size(); }
 		UINT ByteWidthIndices() const { return sizeof(I) * indices.size(); }
 		
+		void CreateVertexBuffer(ID3D11Device* device)
+		{
+			CD3D11_BUFFER_DESC desc(ByteWidthVertices(), D3D11_BIND_VERTEX_BUFFER);
+			D3D11_SUBRESOURCE_DATA vInitData = { 0 };
+			vInitData.pSysMem = vertices.data();
+			DX::ThrowIfFailed(
+				device->CreateBuffer(&desc, &vInitData, VB.ReleaseAndGetAddressOf()));
+		}
+
+		void CreateIndexBuffer(ID3D11Device* device)
+		{
+			CD3D11_BUFFER_DESC desc(ByteWidthIndices(), D3D11_BIND_INDEX_BUFFER);
+			D3D11_SUBRESOURCE_DATA vInitData = { 0 };
+			vInitData.pSysMem = indices.data();
+			DX::ThrowIfFailed(
+				device->CreateBuffer(&desc, &vInitData, IB.ReleaseAndGetAddressOf()));
+		}
+		
 		std::vector<T> vertices;
 		std::vector<I> indices;
+
+		Microsoft::WRL::ComPtr<ID3D11Buffer> VB;
+		Microsoft::WRL::ComPtr<ID3D11Buffer> IB;
 	};
 }

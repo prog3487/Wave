@@ -1,8 +1,23 @@
 
-// TODO ; Recommended method: The ¡°sphere diameter in clip space¡± heuristic
-// https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics
+struct VSInputP
+{
+	float4 Position : SV_Position;
+};
 
+//struct VSInputNmTx
+//{
+//	float4 Position : SV_Position;
+//	float3 Normal   : NORMAL;
+//	float2 TexCoord : TEXCOORD0;
+//};
 
+struct VSOutputEnvMap
+{
+	float4 PositionPS : SV_Position;
+	float3 EnvCoord   : TEXCOORD0;
+};
+
+//-- Wave --//
 struct VSInput
 {
 	float3 PosL		: SV_POSITION;

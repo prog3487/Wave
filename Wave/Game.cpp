@@ -222,8 +222,8 @@ void Game::Render()
 	
 	m_d3dContext->IASetInputLayout(m_wave_layout.Get());
 	m_d3dContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
-	m_d3dContext->IASetVertexBuffers(0, 1, m_grid_vb.GetAddressOf(), &stride, &offset);
-	m_d3dContext->IASetIndexBuffer(m_grid_ib.Get(), m_grid.GetIndexDXGIFormat(), 0);
+	m_d3dContext->IASetVertexBuffers(0, 1, m_grid.VB.GetAddressOf(), &stride, &offset);
+	m_d3dContext->IASetIndexBuffer(m_grid.IB.Get(), m_grid.GetIndexDXGIFormat(), 0);
 	
 	m_d3dContext->RSSetState(m_CurrRS);
 
@@ -248,8 +248,10 @@ void Game::Render()
 	m_d3dContext->DSSetShaderResources(0, _countof(textures), textures);
 	m_d3dContext->DSSetSamplers(0, _countof(samplers), samplers);
 
-	m_d3dContext->PSSetShaderResources(0, _countof(textures), textures);
-	m_d3dContext->PSSetSamplers(0, _countof(samplers), samplers);
+	ID3D11ShaderResourceView* texturesPS[] = { m_wave_tex_SRV1.Get(), m_wave_tex_SRV2.Get(), m_CubeMap.Get() };
+	ID3D11SamplerState* samplersPS[] = { m_common_states->LinearWrap(), m_common_states->LinearWrap() };
+	m_d3dContext->PSSetShaderResources(0, _countof(texturesPS), texturesPS);
+	m_d3dContext->PSSetSamplers(0, _countof(samplersPS), samplersPS);
 
 	//-
 	m_d3dContext->DrawIndexed(m_grid.indices.size(), 0, 0);
@@ -263,6 +265,10 @@ void Game::Render()
 
 	// 
 	m_fake_eye_obj->Draw(m_fake_eye_world, m_Camera->GetView(), m_Camera->GetProj());
+
+	// draw sky last
+	auto skyWorld = Matrix::CreateTranslation(m_Camera->GetPos());
+	m_sky.Render(m_d3dContext.Get(), skyWorld, m_Camera->GetView(), m_Camera->GetProj());
 
     Present();
 }
@@ -413,19 +419,11 @@ void Game::CreateDevice()
 	assert(!m_grid.vertices.empty() && "grid must be created first!");
 
 	{	// grid vertex buffer
-		CD3D11_BUFFER_DESC desc(m_grid.ByteWidthVertices(), D3D11_BIND_VERTEX_BUFFER);
-		D3D11_SUBRESOURCE_DATA vInitData = { 0 };
-		vInitData.pSysMem = m_grid.vertices.data();
-		DX::ThrowIfFailed(
-			device->CreateBuffer(&desc, &vInitData, m_grid_vb.ReleaseAndGetAddressOf()));
+		m_grid.CreateVertexBuffer(device.Get());
 	}
 
 	{	// grid index buffer
-		CD3D11_BUFFER_DESC desc(m_grid.ByteWidthIndices(), D3D11_BIND_INDEX_BUFFER);
-		D3D11_SUBRESOURCE_DATA vInitData = { 0 };
-		vInitData.pSysMem = m_grid.indices.data();
-		DX::ThrowIfFailed(
-			device->CreateBuffer(&desc, &vInitData, m_grid_ib.ReleaseAndGetAddressOf()));
+		m_grid.CreateIndexBuffer(device.Get());
 	}
 
 	{	// create shaders
@@ -462,16 +460,23 @@ void Game::CreateDevice()
 	{
 		DX::ThrowIfFailed(
 			DirectX::CreateDDSTextureFromFile(
-				device.Get(), /*L"asset/water_normal.dds"*/ L"asset/waves0.dds", m_wave_texture1.ReleaseAndGetAddressOf(), m_wave_tex_SRV1.ReleaseAndGetAddressOf()));
+				device.Get(), /*L"asset/water_normal.dds"*/ L"asset/waves0.dds", nullptr, m_wave_tex_SRV1.ReleaseAndGetAddressOf()));
 
 		DX::ThrowIfFailed(
 			DirectX::CreateDDSTextureFromFile(
-				device.Get(), /*L"asset/water_diffuse.dds"*/L"asset/waves1.dds", m_wave_texture1.ReleaseAndGetAddressOf(), m_wave_tex_SRV2.ReleaseAndGetAddressOf()));
+				device.Get(), /*L"asset/water_diffuse.dds"*/L"asset/waves1.dds", nullptr, m_wave_tex_SRV2.ReleaseAndGetAddressOf()));
+
+		DX::ThrowIfFailed(
+			DirectX::CreateDDSTextureFromFile(
+				device.Get(), L"asset/sunsetcube1024.dds", nullptr, m_CubeMap.ReleaseAndGetAddressOf()));
 	}
 
-	{	// QQ ; Is this enough?
+	{
 		m_wave_mat_cbuffer.SetData(m_d3dContext.Get(), m_wave_mat_buffer);
 	}
+
+	m_sky.InitDeviceDependentResources(device.Get());
+
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.

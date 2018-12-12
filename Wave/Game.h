@@ -14,6 +14,7 @@
 #include "ConstantBuffer.h"
 #include "GeometricPrimitive.h"
 #include "BVertexTypes.h"
+#include "Sky.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -85,8 +86,6 @@ private:
 
 	// Geometry for wave
 	WaveGeometry_t									m_grid;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>			m_grid_vb;
-	Microsoft::WRL::ComPtr<ID3D11Buffer>			m_grid_ib;
 
 	// wave shaders
 	Microsoft::WRL::ComPtr<ID3D11VertexShader>		m_wave_vs;
@@ -157,8 +156,10 @@ private:
 	ID3D11RasterizerState* m_CurrRS = nullptr;
 
 	//
-	Microsoft::WRL::ComPtr<ID3D11Resource>			m_wave_texture1;
-	Microsoft::WRL::ComPtr<ID3D11Resource>			m_wave_texture2;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_wave_tex_SRV1;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_wave_tex_SRV2;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_CubeMap;
+
+	//
+	Bruce::Sky m_sky;
 };
