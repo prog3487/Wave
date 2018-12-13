@@ -1,8 +1,8 @@
 # Wave
 
 ## Tessellation 
-- Pixels per edge approach(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
-- Frustum culling tessellation(Discard faces outside frustum). 
+- Pixels per edge approach(sphere diameter in clip space). Not by distance.
+- Frustum culling tessellation (Discard faces outside frustum). 
 
 ## Normal mapping & Displacement
 - Used 2 textures for normal mapping and height displacement.
