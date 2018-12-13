@@ -2,7 +2,7 @@
 
 ## Tessellation 
 - Pixels per edge approach(sphere diameter in clip space). Not LOD by distance. (https://developer.nvidia.com/content/dynamic-hardware-tessellation-basics)
-- Discard faces outside frustum. (working)
+- Frustum culling tessellation(Discard faces outside frustum). 
 
 ## Normal mapping & Displacement
 - Used 2 textures for normal mapping and height displacement.
@@ -22,6 +22,8 @@
 - 2 - switch tessellation camera to real camera.
 - 3 - wireframe drawing mode.
 - 4 - cull counter clockwise drawing mode.
+- 5 - Enable frustum culling.
+- 6 - Disable frustum culling.
 
 ## Etc
 - Need DirectXTK in $(SolutionDir)/../DirectXTK to build & run.
@@ -29,3 +31,5 @@
 ![Image](./wave.jpg)
 
 ![Image](./wave_tessellation.jpg)
+
+![Image](./wave_cull.jpg)
