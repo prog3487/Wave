@@ -15,6 +15,7 @@
 #include "GeometricPrimitive.h"
 #include "BVertexTypes.h"
 #include "Sky.h"
+#include "FPSRenderer.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -140,10 +141,10 @@ private:
 	WaveBuffer										m_wave_buffer;
 	Bruce::ConstantBuffer<WaveBuffer>				m_wave_cbuffer;
 	DirectX::SimpleMath::Matrix						m_wave_world;
-	DirectX::SimpleMath::Vector2					m_wave1_offset = DirectX::SimpleMath::Vector2::Zero;
-	DirectX::SimpleMath::Vector2					m_wave2_offset = DirectX::SimpleMath::Vector2::Zero;
-	DirectX::SimpleMath::Vector2					m_normal1_offset = DirectX::SimpleMath::Vector2::Zero;
-	DirectX::SimpleMath::Vector2					m_normal2_offset = DirectX::SimpleMath::Vector2::Zero;
+	DirectX::SimpleMath::Vector2					m_wave1_offset;
+	DirectX::SimpleMath::Vector2					m_wave2_offset;
+	DirectX::SimpleMath::Vector2					m_normal1_offset;
+	DirectX::SimpleMath::Vector2					m_normal2_offset;
 
 
 	//
@@ -162,4 +163,5 @@ private:
 
 	//
 	Bruce::Sky m_sky;
+	Bruce::FPSRenderer m_fps_renderer;
 };

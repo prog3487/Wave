@@ -163,6 +163,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
     <ClInclude Include="EffectCommon.h" />
+    <ClInclude Include="FPSRenderer.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="IEffect.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="BVertexTypes.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="EffectSky.cpp" />
+    <ClCompile Include="FPSRenderer.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">

@@ -16,8 +16,8 @@ using Microsoft::WRL::ComPtr;
 
 Game::Game() noexcept :
     m_window(nullptr),
-    m_outputWidth(800),
-    m_outputHeight(600),
+    m_outputWidth(1600),
+    m_outputHeight(900),
     m_featureLevel(D3D_FEATURE_LEVEL_9_1)
 {
 }
@@ -161,6 +161,8 @@ void Game::UpdateInput(DX::StepTimer const& timer)
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
+	m_fps_renderer.Update(timer);
+
 	UpdateInput(timer);
 
 	m_Camera->UpdateViewMatrix();
@@ -220,6 +222,9 @@ void Game::Render()
 	UINT stride = m_grid.Stride();
 	UINT offset = 0;
 	
+	m_d3dContext->OMSetBlendState(m_common_states->Opaque(), nullptr, 0xFFFFFFFF);
+	m_d3dContext->OMSetDepthStencilState(m_common_states->DepthDefault(), 0);
+
 	m_d3dContext->IASetInputLayout(m_wave_layout.Get());
 	m_d3dContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_3_CONTROL_POINT_PATCHLIST);
 	m_d3dContext->IASetVertexBuffers(0, 1, m_grid.VB.GetAddressOf(), &stride, &offset);
@@ -270,6 +275,9 @@ void Game::Render()
 	auto skyWorld = Matrix::CreateTranslation(m_Camera->GetPos());
 	m_sky.Render(m_d3dContext.Get(), skyWorld, m_Camera->GetView(), m_Camera->GetProj());
 
+	//
+	m_fps_renderer.Render(m_d3dContext.Get());
+
     Present();
 }
 
@@ -293,7 +301,7 @@ void Game::Present()
     // The first argument instructs DXGI to block until VSync, putting the application
     // to sleep until the next VSync. This ensures we don't waste any cycles rendering
     // frames that will never be displayed to the screen.
-    HRESULT hr = m_swapChain->Present(1, 0);
+    HRESULT hr = m_swapChain->Present(0, 0);
 
     // If the device was reset we must completely reinitialize the renderer.
     if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
@@ -343,8 +351,8 @@ void Game::OnWindowSizeChanged(int width, int height)
 void Game::GetDefaultSize(int& width, int& height) const
 {
     // TODO: Change to desired default window size (note minimum size is 320x200).
-    width = 800;
-    height = 600;
+    width = 1600;
+    height = 900;
 }
 
 // These are the resources that depend on the device.
@@ -476,7 +484,7 @@ void Game::CreateDevice()
 	}
 
 	m_sky.InitDeviceDependentResources(device.Get());
-
+	m_fps_renderer.CreateDeviceDependentResources(device.Get(), context.Get());
 }
 
 // Allocate all memory resources that change on a window SizeChanged event.
@@ -588,6 +596,7 @@ void Game::CreateResources()
 void Game::OnDeviceLost()
 {
     // TODO: Add Direct3D resource cleanup here.
+	m_fps_renderer.OnDeviceLost();
 
     m_depthStencilView.Reset();
     m_renderTargetView.Reset();

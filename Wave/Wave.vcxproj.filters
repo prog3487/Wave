@@ -21,6 +21,7 @@
     <ClInclude Include="Sky.h" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="EffectCommon.h" />
+    <ClInclude Include="FPSRenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="BVertexTypes.cpp" />
     <ClCompile Include="Sky.cpp" />
     <ClCompile Include="EffectSky.cpp" />
+    <ClCompile Include="FPSRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resource.rc" />

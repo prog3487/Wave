@@ -35,6 +35,7 @@
 #include <dxgi1_2.h>
 #include <DirectXMath.h>
 #include <DirectXColors.h>
+#include "SimpleMath.h"
 
 #include <algorithm>
 #include <exception>
