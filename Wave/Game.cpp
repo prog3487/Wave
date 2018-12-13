@@ -141,6 +141,13 @@ void Game::UpdateInput(DX::StepTimer const& timer)
 			if (kb.D4)
 				m_CurrRS = m_common_states->CullCounterClockwise();
 		}
+
+		{	// enable/disable frustum culling
+			if (kb.D5)
+				m_wave_buffer.EnableFrustumCull = 0;
+			if (kb.D6)
+				m_wave_buffer.EnableFrustumCull = 1;
+		}
 	}
 
 	{	// mouse
@@ -200,7 +207,7 @@ void Game::Update(DX::StepTimer const& timer)
 			Matrix::CreateTranslation(m_normal1_offset.x, m_normal1_offset.y, 0.0f);
 		m_wave_buffer.NormalTexTransform1=
 			Matrix::CreateScale(1.0f) *
-			Matrix::CreateTranslation(m_normal2_offset.x, m_normal2_offset.y, 0.0f);
+			Matrix::CreateTranslation(m_normal2_offset.x, m_normal2_offset.y, 0.0f);	
 	}
 
 	{

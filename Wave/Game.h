@@ -107,7 +107,7 @@ private:
 		float Proj11;
 		float EdgesPerScreenHeight;
 		float HeightScale;
-		float pad0;
+		UINT EnableFrustumCull = 0;
 	}; 
 
 	struct DirectionalLight

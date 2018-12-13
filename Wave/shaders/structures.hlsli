@@ -89,5 +89,5 @@ cbuffer WaveBuffer : register(b0)
 	float gProj11;
 	float gEdgesPerScreenHeight;
 	float gHeightScale;
-	float pad0;
+	unsigned int gEnableFrustumCull;
 };

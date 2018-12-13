@@ -14,10 +14,36 @@ float CalculateTessellationFactor(float3 Control0, float3 Control1)
 	return max(1, gEdgesPerScreenHeight * ProjectedExtent);
 }
 
+bool IsPointInsideFrustum(float4 p)
+{
+	float4 cp = mul(gTessViewProj, p);
+	if (cp.w < cp.x || cp.x < -cp.w)
+		return false;
+	if (cp.w < cp.y || cp.y < -cp.w)
+		return false;
+	if (cp.w < cp.z || cp.z < 0.0f)
+		return false;
+	return true;
+}
+
 PatchTess constantFunc(InputPatch<VSOutput, 3> patch)
 {
 	PatchTess pt;
-	
+
+	if (gEnableFrustumCull > 0)
+	{
+		if (!IsPointInsideFrustum(float4(patch[0].PosW, 1.0f)) &&
+			!IsPointInsideFrustum(float4(patch[1].PosW, 1.0f)) &&
+			!IsPointInsideFrustum(float4(patch[1].PosW, 1.0f)))
+		{
+			pt.Edge[0] = 0.0f;
+			pt.Edge[1] = 0.0f;
+			pt.Edge[2] = 0.0f;
+			pt.Inside = 0.0f;
+			return pt;
+		}
+	}
+
 	pt.Edge[0] = CalculateTessellationFactor(patch[1].PosW.xyz, patch[2].PosW.xyz); // v1-v2
 	pt.Edge[1] = CalculateTessellationFactor(patch[2].PosW.xyz, patch[0].PosW.xyz); // v2-v0
 	pt.Edge[2] = CalculateTessellationFactor(patch[0].PosW.xyz, patch[1].PosW.xyz); // v0-v1
