@@ -17,11 +17,19 @@ float CalculateTessellationFactor(float3 Control0, float3 Control1)
 bool IsPointInsideFrustum(float4 p)
 {
 	float4 cp = mul(gTessViewProj, p);
-	if (cp.w < cp.x || cp.x < -cp.w)
+	
+	float ClipOffset = 2.0f;
+	if (cp.w + ClipOffset < cp.x)
 		return false;
-	if (cp.w < cp.y || cp.y < -cp.w)
+	if (cp.x < -(cp.w + ClipOffset))
 		return false;
-	if (cp.w < cp.z || cp.z < 0.0f)
+	if (cp.w + ClipOffset < cp.y)
+		return false;
+	if (cp.y < -(cp.w + ClipOffset))
+		return false;
+	if (cp.w + ClipOffset < cp.z)
+		return false;
+	if (cp.z < 0.0f)
 		return false;
 	return true;
 }
@@ -34,7 +42,7 @@ PatchTess constantFunc(InputPatch<VSOutput, 3> patch)
 	{
 		if (!IsPointInsideFrustum(float4(patch[0].PosW, 1.0f)) &&
 			!IsPointInsideFrustum(float4(patch[1].PosW, 1.0f)) &&
-			!IsPointInsideFrustum(float4(patch[1].PosW, 1.0f)))
+			!IsPointInsideFrustum(float4(patch[2].PosW, 1.0f)))
 		{
 			pt.Edge[0] = 0.0f;
 			pt.Edge[1] = 0.0f;
