@@ -42,13 +42,12 @@ void Game::Initialize(HWND window, int width, int height)
 	}
 
 	{	// Light settings
-		Vector3 LightPos(10.0f, 10.0f, -10.0f);
+		Vector3 LightPos(-10.0f, 10.0f, -10.0f);
 		Vector3 LightDir = Vector3::Zero - LightPos;
 		LightDir.Normalize();
 
 		m_light_buffer.DirLight.ColorStrength = { 1.0f, 1.0f, 1.0f };
 		m_light_buffer.DirLight.Direction = LightDir;
-		//m_light_buffer.DirLight.Direction = -Vector3::UnitY;
 	}
 	
 	CreateGrid(30.0f, 30.0f, 80, 80, m_grid);
@@ -308,7 +307,7 @@ void Game::Present()
     // The first argument instructs DXGI to block until VSync, putting the application
     // to sleep until the next VSync. This ensures we don't waste any cycles rendering
     // frames that will never be displayed to the screen.
-    HRESULT hr = m_swapChain->Present(0, 0);
+    HRESULT hr = m_swapChain->Present(1, 0);
 
     // If the device was reset we must completely reinitialize the renderer.
     if (hr == DXGI_ERROR_DEVICE_REMOVED || hr == DXGI_ERROR_DEVICE_RESET)
@@ -482,8 +481,9 @@ void Game::CreateDevice()
 				device.Get(), /*L"asset/water_diffuse.dds"*/L"asset/waves1.dds", nullptr, m_wave_tex_SRV2.ReleaseAndGetAddressOf()));
 
 		DX::ThrowIfFailed(
-			DirectX::CreateDDSTextureFromFile(
-				device.Get(), L"asset/sunsetcube1024.dds", nullptr, m_CubeMap.ReleaseAndGetAddressOf()));
+			CreateDDSTextureFromFileEx(device.Get(), L"asset/grasscube1024.dds", 0,
+				D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, D3D11_RESOURCE_MISC_TEXTURECUBE,
+				false, nullptr, m_CubeMap.ReleaseAndGetAddressOf()));
 	}
 
 	{

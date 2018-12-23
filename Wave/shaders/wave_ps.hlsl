@@ -79,8 +79,8 @@ float4 main(DomainOut pin) : SV_Target
 	float3 bn1 = NormalSampleToWorldSpace(n1, pin.NormalW, pin.TangentW);
 	
 	float3 bn = normalize(bn0 + bn1);
-
 	float3 r = reflect(-ToEye, bn);
+	r.z = -r.z;	// RH
 	float4 diffuse = TexCube.Sample(CubeSampler, r);
 	//float4 diffuse = gMaterial.DiffuseAlbedo;
 

@@ -10,5 +10,6 @@ VSOutputEnvMap main(VSInputP vin)
 	VSOutputEnvMap vout;
 	vout.EnvCoord	= vin.Position.xyz;	// sky sphere
 	vout.PositionPS = mul(gWVP, vin.Position).xyww;	// depth -> 1
+	vout.EnvCoord.z = -vout.EnvCoord.z;	// to RH
 	return vout;
 }

@@ -69,7 +69,9 @@ namespace Bruce
 	void EffectSky::Impl::LoadCubeMap(std::wstring path)
 	{
 		DX::ThrowIfFailed(
-			CreateDDSTextureFromFile(mDeviceResource.device.Get(), path.c_str(), nullptr, mCubeMap.ReleaseAndGetAddressOf()));
+			CreateDDSTextureFromFileEx(mDeviceResource.device.Get(), path.c_str(), 0, 
+				D3D11_USAGE_IMMUTABLE, D3D11_BIND_SHADER_RESOURCE, 0, D3D11_RESOURCE_MISC_TEXTURECUBE,
+				false, nullptr, mCubeMap.ReleaseAndGetAddressOf()));
 	}
 
 	//!

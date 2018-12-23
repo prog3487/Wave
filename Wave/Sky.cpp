@@ -10,7 +10,7 @@ namespace Bruce
 	void Sky::InitDeviceDependentResources(ID3D11Device* device)
 	{
 		m_SkyEffect = std::make_unique<Bruce::EffectSky>(device);
-		m_SkyEffect->LoadCubeMap(L"asset/sunsetcube1024.dds");
+		m_SkyEffect->LoadCubeMap(L"asset/grasscube1024.dds");
 		
 		std::vector<GeometricPrimitive::VertexType> vertices;
 		GeometricPrimitive::CreateGeoSphere(vertices, m_sphere.indices);
