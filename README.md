@@ -1,5 +1,9 @@
 # Wave
 
+![Image](./wave1.jpg)
+
+![Image](./wave2.jpg)
+
 ## Tessellation 
 - Pixels per edge approach(sphere diameter in clip space). Not by distance.
 - Frustum culling tessellation (Discard faces outside frustum). 
@@ -12,6 +16,7 @@
 ## Cubemap
 - Sky sphere.
 - Wave reflection from cubemap.
+- Translucency.
 
 ## Lighting
 - One directional light with diffuse, Fresnel effect, Specular.
