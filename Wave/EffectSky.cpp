@@ -56,6 +56,7 @@ namespace Bruce
 	void EffectSky::Impl::Apply(ID3D11DeviceContext* context)
 	{
 		context->RSSetState(mDeviceResource.mCommonStates->CullClockwise());
+		context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		context->IASetInputLayout(mInputLayout.Get());
 		context->VSSetShader(mVS.Get(), nullptr, 0);
 		context->PSSetShader(mPS.Get(), nullptr, 0);

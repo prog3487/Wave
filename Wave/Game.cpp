@@ -36,7 +36,7 @@ void Game::Initialize(HWND window, int width, int height)
 	m_Camera->CreateView(Vector3(0, 10, 10), Vector3::Zero, Vector3::UnitY);
 
 	{	// Wave material
-		m_wave_mat_buffer.DiffuseAlbedo = Colors::DodgerBlue;
+		m_wave_mat_buffer.DiffuseAlbedo = { 0.1f, 0.1f, 0.2f };
 		m_wave_mat_buffer.FresnelR0 = { 0.02f, 0.02f, 0.02f };
 		m_wave_mat_buffer.Roughness = 0.02f;
 	}
@@ -225,10 +225,16 @@ void Game::Render()
 
     Clear();
 
+	// Draw sky first
+	m_d3dContext->OMSetBlendState(m_common_states->Opaque(), nullptr, 0xFFFFFFFF);
+	auto skyWorld = Matrix::CreateTranslation(m_Camera->GetPos());
+	m_sky.Render(m_d3dContext.Get(), skyWorld, m_Camera->GetView(), m_Camera->GetProj());
+
+	// Draw Wave
 	UINT stride = m_grid.Stride();
 	UINT offset = 0;
 	
-	m_d3dContext->OMSetBlendState(m_common_states->Opaque(), nullptr, 0xFFFFFFFF);
+	m_d3dContext->OMSetBlendState(m_common_states->AlphaBlend(), nullptr, 0xFFFFFFFF);
 	m_d3dContext->OMSetDepthStencilState(m_common_states->DepthDefault(), 0);
 
 	m_d3dContext->IASetInputLayout(m_wave_layout.Get());
@@ -276,10 +282,6 @@ void Game::Render()
 
 	// 
 	m_fake_eye_obj->Draw(m_fake_eye_world, m_Camera->GetView(), m_Camera->GetProj());
-
-	// draw sky last
-	auto skyWorld = Matrix::CreateTranslation(m_Camera->GetPos());
-	m_sky.Render(m_d3dContext.Get(), skyWorld, m_Camera->GetView(), m_Camera->GetProj());
 
 	//
 	m_fps_renderer.Render(m_d3dContext.Get());

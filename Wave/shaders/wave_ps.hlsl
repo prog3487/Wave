@@ -85,5 +85,5 @@ float4 main(DomainOut pin) : SV_Target
 	//float4 diffuse = gMaterial.DiffuseAlbedo;
 
 	float3 LitColor = ComputeDirectionalLight(gDirLight, gMaterial, diffuse.rgb, bn, ToEye);
-	return float4(LitColor, diffuse.a);
+	return float4(LitColor, 0.1f);
 }
